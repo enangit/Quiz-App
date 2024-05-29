@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 
 type QuestionTimerProps = {
+    mode: string
     timeout: number
-    onTimeout: () => void
+    onTimeout: (() => void) | null
 }
-const QuestionTimer: React.FC<QuestionTimerProps> = ({ timeout, onTimeout }) => {
+const QuestionTimer: React.FC<QuestionTimerProps> = ({ timeout, onTimeout, mode }) => {
     const [remainingTime, setRemainingTime] = useState(timeout);
 
     useEffect(() => {
-        const timer = setTimeout(onTimeout, timeout);
+        const timer = setTimeout(() => {
+            onTimeout && onTimeout();
+        }, timeout);
 
         return () => {
             clearTimeout(timer);
@@ -26,7 +29,8 @@ const QuestionTimer: React.FC<QuestionTimerProps> = ({ timeout, onTimeout }) => 
     }, []);
 
     return (
-        <progress max={timeout} value={remainingTime} className='question-time'></progress>
+        <progress max={timeout} value={remainingTime} className={mode}>
+        </progress>
     )
 }
 

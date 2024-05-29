@@ -3,18 +3,17 @@ import React, { useRef } from 'react';
 type AnswersProps = {
     selectedAnswer: string | null
     answers: string[]
-    userAnswers: (string | null)[]
     answerState: string
     handleSelectAnswer: (ans: string | null) => void
 }
 
-const Answers: React.FunctionComponent<AnswersProps> = ({answers, selectedAnswer, answerState, handleSelectAnswer }) => {
+const Answers: React.FunctionComponent<AnswersProps> = ({ answers, selectedAnswer, answerState, handleSelectAnswer }) => {
     const shuffledAnswers = useRef<string[]>();
-
     if (!shuffledAnswers.current) {
         shuffledAnswers.current = [...answers];
         shuffledAnswers.current.sort(() => Math.random() - 0.5);
     }
+    console.log(answerState)
 
     return (
         shuffledAnswers.current
@@ -22,7 +21,8 @@ const Answers: React.FunctionComponent<AnswersProps> = ({answers, selectedAnswer
                 const isSelected = selectedAnswer === answer
                 let buttonClasses = ''
                 if (answerState === "answered" && isSelected) {
-                    buttonClasses = "selected"
+                    console.log("got here");
+                    buttonClasses = "selected";
                 }
 
                 if ((answerState === "correct" || answerState === "wrong") && isSelected) {
@@ -38,17 +38,13 @@ const Answers: React.FunctionComponent<AnswersProps> = ({answers, selectedAnswer
                         <button
                             className={buttonClasses}
                             onClick={() => { handleSelectAnswer(answer) }}
+                            disabled={answerState !== ""}
                         >
                             {answer}
                         </button>
                     </li>
                 )
             })
-        // {
-        //     answers.map((ans) => {
-        //         )
-        //     })
-        // }
     )
 }
 
